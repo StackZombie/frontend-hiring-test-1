@@ -7,9 +7,9 @@ import { CustomButton } from '../Button/Button';
 import { navbarStyles } from './style';
 
 import { useTheme } from '@emotion/react';
-
+import { useSelector } from 'react-redux';
 export const NavBar = () => {
-  const theme = useTheme();
+  const isLoggedIn = useSelector((state: any) => state.userAuth.isLoggedIn);
 
   const logOut = () => {
     console.log('Log out function');
@@ -20,12 +20,14 @@ export const NavBar = () => {
       <Toolbar>
         <img src={logo} style={navbarStyles.logo} />
         <Box sx={navbarStyles.buttonEnd}>
-          <CustomButton
-            label="Log Out"
-            className="btn-primary float-right"
-            size="medium"
-            click={logOut}
-          />
+          {isLoggedIn ? (
+            <CustomButton
+              label="Log Out"
+              className="btn-primary float-right"
+              size="medium"
+              click={logOut}
+            />
+          ) : null}
         </Box>
       </Toolbar>
     </AppBar>

@@ -4,12 +4,31 @@ import { OPTIONS } from './utils';
 import { Container } from '@mui/system';
 import { useState } from 'react';
 import { Pagination, Box } from '@mui/material';
+import { useSelector } from 'react-redux';
 import CallList from './CallList';
+import { InitialState, Call } from '../../redux/reducers/CallReducer';
+
+import {
+  useDownloadCallLogsData,
+  useFilterCallLogsData,
+} from '../../hooks/useDownloadCallLogs';
+
 const CallLogContiner = () => {
+  const limit = 10;
+  const [offset, setOffset] = useState(10);
   const [option, setOption] = useState<string>(OPTIONS[2]);
+
+  useDownloadCallLogsData(offset);
+  useFilterCallLogsData(option);
+
+  const calls = useSelector<InitialState, Call[]>((state) => state.calls);
 
   const handleOption = (option: string) => {
     setOption(option);
+  };
+
+  const changePage = (event: any, value: number) => {
+    setOffset(() => offset + limit);
   };
 
   return (
@@ -30,7 +49,7 @@ const CallLogContiner = () => {
           <CallList />
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-          <Pagination count={10} color="primary" />
+          <Pagination count={10} color="primary" onChange={changePage} />
         </Box>
       </Container>
     </div>

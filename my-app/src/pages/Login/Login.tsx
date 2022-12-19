@@ -6,12 +6,16 @@ import Container from '@mui/material/Container';
 import { Input } from '../../components/Input/Input';
 import { loginStyles } from './style';
 import { NavBar } from '../../components/Navbar/Navbar';
+import { logIn } from '../../redux/actions/auth';
+import { useDispatch } from 'react-redux';
+import store from '../../redux/store';
 interface Authentication {
   email: string;
   password: string;
 }
 
 const Login = () => {
+  const dispatch = useDispatch<typeof store.dispatch>();
   const [auth, setAuth] = useState<Authentication>({
     email: '',
     password: '',
@@ -19,7 +23,10 @@ const Login = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(auth);
+    if (auth.email && auth.password) {
+      console.log('Not null');
+      dispatch(logIn(auth.email, auth.password));
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
